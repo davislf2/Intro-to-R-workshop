@@ -29,3 +29,10 @@ y <- 10 # Assign operators: only outside of functions
 x+y
 # 1variable # Not allowed
 
+#Vectorisation
+vector = c(10,20,35)
+log(vector)
+logical_vector = c(TRUE,FALSE,TRUE)
+chr_vector = c("cat","dog","chair")
+ls() #list all variables
+rm(chr_vector) #remove variables
