@@ -457,3 +457,126 @@ ggplot(titanic1, aes(x=Age, y=Fare))+
   geom_line()+
   geom_point(aes(color=as.factor(Pclass)))
 
+# Add a curve to fit the datapoints
+ggplot(titanic1, aes(x=Age, y=Fare))+
+  geom_point()+
+  geom_smooth(method = "lm") # linear method
+
+# Challenge 6.3
+#
+# Change some off the parameters of the following plot:
+# ggplot(titanic, aes(x = Age, y = Fare, col = as.factor(Pclass)))+
+# 	geom_point() + geom_smooth(method = “lm")
+#
+# Change the size of the fit line to size =1.5 and remove the standard error # (se) from the fitted line.
+# Rescale the y axis to log10 units.
+#Hints:
+# 1. We can make the line thicker by setting the size and se aesthetic in the geom_smooth layer.
+# 2. We can change the scale of units on the y axis using the scale functions. These control the mapping between the data values and visual values of an aesthetic.
+
+# Sol1: scale_y_log10()
+ggplot(titanic1, aes(x = Age, y = Fare, col = as.factor(Pclass)))+
+	geom_point() + geom_smooth(method = "lm", aes(size = 1.5), se=FALSE) + scale_y_log10()
+
+# Sol2: log10(Fare): show log10 values
+ggplot(titanic1, aes(x = Age, y = log10(Fare), col = as.factor(Pclass)))+
+  geom_point() + geom_smooth(method = "lm", size = 1.5, se = FALSE)
+
+# Bars: you have to the y bar
+ggplot(titanic1, aes(x = Sex, fill=as.factor(Survived)))+
+  geom_bar(position = "dodge")
+
+# Facet_grid: classify to sub plots
+ggplot(titanic1, aes(x = Sex, fill=as.factor(Survived)))+
+  geom_bar(position = "dodge")+
+  facet_grid(~Pclass)
+
+# Labeller
+ggplot(titanic1, aes(x = Sex, fill=as.factor(Survived)))+
+  geom_bar(position = "dodge")+
+  facet_grid(~Pclass, labeller = labeller(Pclass=c("1"="first class", "2"="second class", "3"="third class")))
+
+
+# Challenge 6.4: PIMP your plot
+#
+# Get this figure ready for a publication:
+#
+# ggplot(titanic, aes(x = Sex, fill=as.factor(Survived))) +
+#  geom_bar(position = 'dodge') +
+#  facet_grid(~ Pclass, labeller = labeller(Pclass = c(`1` = "first class",
+#                                                      `2` = "second class",
+#        	                                          `3` = "third class")))
+#
+# We can do this by adding a couple of different layers. Razzle Dazzle your   
+# plot with some of the commands on the cheat sheet, including but not       
+# limited to:
+# 1.xlab()
+# 2.ggtitle()
+# 3.scale_fill_discrete()
+# 4.theme()
+# 5.What does “theme(plot.title = element_text(hjust = 0.5))” do?
+  
+# ggplot(titanic, aes(x = Sex, fill=Survived)) +
+#    geom_bar(position = 'dodge') +
+#    facet_grid(~Pclass, labeller = labeller(Pclass = c("1" = "first class",
+#                                                       "2" = "second class",
+#          	                                            "3" = "third class")))+
+#    xlab("Sex and Pclass")+
+#    ggtitle("Survived people of different Sex and Pclass")+
+#   # scale_fill_continuous()+ 
+#    scale_fill_discrete(breaks=c("0","1"))+
+#    scale_colour_gradient(low = "#132B43", high = "#56B1F7")+
+#    theme_minimal()+
+#    theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5)) 
+
+ggplot(titanic, aes(x = Sex, fill=as.factor(Survived))) +
+  geom_bar(position = 'dodge') +
+  facet_grid(~Pclass, labeller = labeller(Pclass = c("1" = "first class",
+                                                     "2" = "second class",
+                                                     "3" = "third class")))+
+  xlab("Sex and Pclass")+
+  ggtitle("Survived people of different Sex and Pclass")+
+  scale_fill_discrete(breaks=c("0","1"))+
+  # theme_minimal()
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
+## Others' works
+ggplot(titanic1, aes(x = Sex, fill = as.factor(Survived)))+
+  geom_bar(position = 'dodge')+
+  facet_grid(~Pclass, labeller = labeller(Pclass = c('1' = "First Class",
+                                                     '2' = "Second Class",
+                                                     '3' = "Third Class")))+
+  labs(x = 'Gender', y = "Number of People Survived", fill = "Survival Status")+
+  ggtitle("Number of People Survived", "According to Class")+
+  scale_fill_manual(values = c("red", "green"))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+### Save your plot
+# Sol1:
+ggsave("myplot.pdf", width=10, height=7, units="in")
+ggsave("myplot.png", width=10, height=7, units="in")
+
+# Sol2: another way to save plot without ggsave
+pdf(file="myPlot2.pdf", width = 10, height = 7)
+# print(
+  ggplot(titanic1, aes(x = Sex, fill = as.factor(Survived)))+
+    geom_bar(position = 'dodge')
+# )
+dev.off() # device off then it will save
+
+class1 = titanic1 %>% filter(Pclass == 1)
+dim(class1)
+write.table(class1, file = "titanic_class1.txt", sep = "\t", quote = FALSE, row.names=FALSE)
+
+# Challenge 7.2
+#
+# Make a subset the titanic data to include only data for children
+# (below the age of 18).
+#
+# Write the new subset to a file in your IntroductiontoR/ directory using	
+# write.csv(). What is used to separate columns? And What is used for decimal # points?
+
+children = titanic1 %>% filter(Age <= 18)
+# write.csv(children, file = "titanic_children.csv")
+write.csv(children, file = "titanic_children.csv", quote = FALSE, row.names=FALSE)
