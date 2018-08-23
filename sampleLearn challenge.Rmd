@@ -1,0 +1,169 @@
+---
+title: "Markdown Example: Learning Data"
+author: "Pablo Franco"
+date: "`r format(Sys.time(), '%d %B, %Y')`"#"08/11/2017"
+output: # yaml format
+  html_document:
+    number_sections: yes # heading with number
+    theme: united
+    toc: true #table of contents (index)
+    toc_float: true
+    code_folding: hide
+    df_print: paged #change table output (to see other options refer to Markdown book)
+---
+
+```{r setup0, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# install.packages("RJSONIO")
+# install.packages("ggplot2")
+# install.packages("stargazer")
+# install.packages("plotly")
+# install.packages("WDI")
+# install.packages("RXKCD")
+
+library(RJSONIO)
+library(WDI)
+library(ggplot2)
+library(plotly)
+library(stargazer)
+library(RXKCD)
+```
+
+<style>
+
+table, td, th {
+  border: none;
+  padding-left: 1em;
+  padding-right: 1em;
+  min-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+</style>
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+
+The R-markdown definitie guide jsut came out! check it [here](https://bookdown.org/yihui/rmarkdown/).
+
+Chek out also the cheat sheet [here](https://www.rstudio.com/resources/cheatsheets/).
+
+You can find the R-markdown document that can be used to produce this html file [here](https://drive.google.com/open?id=1TSUSnWD4EXzS9vM1GXqsgnSUv1yvsFMP)
+
+Lets try it now!
+
+*MISSING*
+
+# Economic Indicators Interactive plot{.tabset .tabset-fade .tabset-pills}
+
+## With Code
+
+### Plot of the two variables
+*MISSING*
+```{r setup}
+
+start_year=2008
+end_year=2011
+
+worlDIndic=WDI(country = "all", indicator=c("SP.DYN.LE00.IN","NY.GDP.PCAP.CD"),
+                start = start_year, end = end_year, extra = FALSE, cache = NULL)
+
+names(worlDIndic)[names(worlDIndic)=="SI.POV.DDAY"]="Poverty %"
+names(worlDIndic)[names(worlDIndic)=="SP.DYN.LE00.IN"]="LifeExpectancy"
+names(worlDIndic)[names(worlDIndic)=="NY.GDP.PCAP.CD"]="GDPperCapita"
+
+
+```
+
+### Data Frame downloaded
+We can visualise the first rows of the data.frame
+*MISSING*
+```{r firstrows}
+worlDIndicFirst = worlDIndic[1,]
+
+```
+
+```{r extraChunk1}
+# head(worlDindic)
+```
+
+```{r plot1}
+plot_ly(worlDIndic, x = ~GDPperCapita, y = ~LifeExpectancy,
+        size = ~GDPperCapita, text = ~paste("Country: ", country),
+        type = "scatter",
+        mode = "markers")
+
+```
+
+
+*MISSING*
+The start and end year of this plot is `r start_year` and `r end_year` respectively.
+
+
+### Linear regression with life expectancy as dependent variable and GDP per Capita as independent variable
+
+*MISSING*
+>There are **3** different ways to visualise tables in markdown. Can you find these in the cheatsheet? Which one are we using here?
+
+```{r regression1, results='asis'}
+simple_model = lm(LifeExpectancy ~ GDPperCapita,worlDIndic)
+title = "Linear Relation between GDP per Capita and Life expectancy"
+table = stargazer(simple_model, type="html", report=('vc*p'),column.labels=c("Dependent Variable"), dep.var.caption = title, dep.var.labels.include = TRUE,model.names=FALSE, align=TRUE, column.sep.width = "5000pt")
+```
+
+```{r regressionExtra, results='asis'}
+simple_model = lm(LifeExpectancy ~ GDPperCapita,worlDIndic)
+title = "Linear Relation between GDP per Capita and Life expectancy"
+
+knitr::kable(worlDIndic, caption = "Table with kable")
+
+```
+
+
+## Without Code
+
+<br>
+<br>
+<br>
+
+>Sometimes it is usefull to show the code that you used to generate a plot or a statistical test. However, sometimes you might want to generate a report with only the results. Fear not! We can also do this...
+
+<br>
+<br>
+<br>
+
+### Data Frame downloaded
+We can visualise the first rows of the data.frame
+```{r extraChunk2, , echo=FALSE, warning=FALSE }
+# head(worlDIndic)
+```
+
+
+### Plot of the two variables
+
+```{r plot2}
+plot_ly(worlDIndic, x = ~GDPperCapita, y = ~LifeExpectancy,
+        size = ~GDPperCapita, text = ~paste("Country: ", country))
+```
+
+### Linear regression with life expectancy as dependent variable and GDP per Capita as independent variable
+```{r regression2}
+simple_model = lm(LifeExpectancy ~ GDPperCapita,worlDIndic)
+title = "Linear Relation between GDP per Capita and Life expectancy"
+stargazer(simple_model, type="html", report=('vc*p'),column.labels=c("Dependent Variable"), dep.var.caption = title, dep.var.labels.include = TRUE,model.names=FALSE, align=TRUE, column.sep.width = "5000pt") 
+```
+
+
+*MISSING*
+
+```{r fun}
+getXKCD(which = "random")
+```
+
+
+

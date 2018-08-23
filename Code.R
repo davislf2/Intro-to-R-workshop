@@ -578,5 +578,5 @@ write.table(class1, file = "titanic_class1.txt", sep = "\t", quote = FALSE, row.
 # write.csv(). What is used to separate columns? And What is used for decimal # points?
 
 children = titanic1 %>% filter(Age <= 18)
-# write.csv(children, file = "titanic_children.csv")
-write.csv(children, file = "titanic_children.csv", quote = FALSE, row.names=FALSE)
+write.csv(children, file = "titanic_children2.csv", row.names=FALSE)
+# write.csv(children, file = "titanic_children.csv", quote = FALSE, row.names=FALSE) 

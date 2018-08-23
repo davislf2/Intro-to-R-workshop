@@ -1,0 +1,66 @@
+---
+title: "RMarkdown_example"
+author: "Davis"
+date: "8/21/2018"
+output: 
+  html_document:
+    toc: true #table of contents (index)
+---
+
+<!-- Comment in HTML syntax -->
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+# This is for setting up globally
+# install.packages("stargazer")
+# install.packages("plotly")
+# install.packages("WDI")
+# install.packages("RXKCD")
+library(stargazer)
+library(plotly)
+library(WDI)
+library(RXKCD)
+
+```
+
+<style>
+
+table, td, th {
+  border: none;
+
+}
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+```{r stars}
+stargazer(attitude)
+# getXKCD()
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+x="Hello World"
+```
+
+Insert R chunk
+
+
+### Inline code
+This is markdown and this text from a variable in R: `r x`
